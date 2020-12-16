@@ -1,19 +1,19 @@
-import React, {useContext} from "react"
+import React, { useContext } from "react"
 import { Form, Button, Container } from "react-bootstrap"
-import {AuthContext} from "../App"
-import {Redirect} from "react-router-dom"
+import { AuthContext } from "../App"
+import { Redirect } from "react-router-dom"
 
 function SignIn() {
-    
-    const {handleLogin, emailError, passwordError, setEmail, setPassword, email, password, user} = useContext(AuthContext)
+
+    const { handleLogin, emailError, passwordError, setEmail, setPassword, email, password, user } = useContext(AuthContext)
 
     const onSubmit = (e) => {
         e.preventDefault()
         handleLogin(email, password)
     }
 
-    if(user) {
-        return <Redirect to="/movies"/>
+    if (user) {
+        return <Redirect to="/movies" />
     }
 
     return (

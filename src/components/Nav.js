@@ -1,9 +1,12 @@
-import React, {useContext} from "react"
-import {Navbar, Nav} from "react-bootstrap"
-import {AuthContext} from "../App"
+import React, { useContext } from "react"
+import { Navbar, Nav } from "react-bootstrap"
+import { AuthContext } from "../App"
 
+/**
+ * Navbar function displays the navigation bar
+ */
 function NavBar() {
-    const {user, handleLogout} = useContext(AuthContext)
+    const { user, handleLogout } = useContext(AuthContext)
 
     return (
         <Navbar bg="light" variant="light">
@@ -12,7 +15,7 @@ function NavBar() {
                 <Nav.Link href="/movies">Films</Nav.Link>
                 <Nav.Link href="/animes">Animes</Nav.Link>
                 <Nav.Link href="/mangas">Mangas</Nav.Link>
-                {!!user ?<Nav.Link onClick={() => handleLogout()}>Se déconnecter </Nav.Link> : <Nav.Link href="/signin">Se connecter</Nav.Link> }
+                {!!user ? <Nav.Link onClick={() => handleLogout()}>Se déconnecter </Nav.Link> : <Nav.Link href="/signin">Se connecter</Nav.Link>}
             </Nav>
         </Navbar>
     )
