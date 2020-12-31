@@ -10,6 +10,7 @@ const MovieDetail = () => {
 
     const { id } = useParams()
     const { user } = useContext(AuthContext)
+    const [rate, setRate] = useState(1)
     const [movie, setMovie] = useState({})
     const [ratings, setRatings] = useState([])
     const [loading, setLoading] = useState(false)
@@ -32,33 +33,101 @@ const MovieDetail = () => {
             }
         }
         getMovieAndRatings()
-    }, [])
+    }, [id])
 
-    return (
-        <div style={loading ? { backgroundColor: "gray", height: "1000px" } : null}>
-            <h1>{movie.title}</h1>
-            <Image src={movie.imageURL} />
-            {loading ? <div className="loader"></div> :
-                ratings.map(rating => {
-                    return (
-                        <div key={rating.id}>
-                            <StarRatingComponent starCount={5} value={rating.rate} />
-                            {rating.message}
-                        </div>
-                    )
-                })
+    const sendRate = () => {
+        console.log("Begin method sendRate...");
+        let rateText = document.getElementById("rateText").value;
+        console.log("rateText : ", rateText);
+        if (rateText === "") {
+            alert("Must be filled");
+        } else {
+            console.log("Sending rate...");
+            console.log(user)
+            const movieRef = firebase.firestore().doc(`/movies/${id}`)
+            let review = {
+                createdAt: Date.now().toLocaleString("fr"),
+                id_user: user,
+                message: rateText,
+                rate: rate
             }
+            //movieRef.collection("/reviews").add(review)
+        }
+    }
 
-            <div>
-                Avis
-                Note : <StarRatingComponent starCount={5} />
-                <input type="textarea" disabled={!(!!user)} />
-                <input type="submit" value="Noter" disabled={!(!!user)} />
+    const hasAlreadyReviewed = async () => {
+        const movieRef = firebase.firestore().doc(`/movies/${id}`);
+        const reviewRef = await movieRef.collection("/reviews").where("id_user", "==", user.uid).get()
+        return reviewRef.empty
+
+    }
+
+    if (!!user) {
+        if (hasAlreadyReviewed()) {
+            return (
+                <div style={loading ? { backgroundColor: "gray", height: "1000px" } : null}>
+                    <h1>{movie.title}</h1>
+                    <Image src={movie.imageURL} />
+                    {loading ? <div className="loader"></div> :
+                        ratings.map(rating => {
+                            return (
+                                <div key={rating.id}>
+                                    <StarRatingComponent name="rateMovie" value={rating.rate} />
+                                    {rating.message}&nbsp;
+                                    {new Date(rating.createdAt.seconds * 1000).toLocaleDateString("fr")}
+                                </div>
+                            )
+                        }
+                        )
+                    }
+                </div>)
+
+        } else {
+            return (
+                <div style={loading ? { backgroundColor: "gray", height: "1000px" } : null}>
+                    <h1>{movie.title}</h1>
+                    <Image src={movie.imageURL} />
+                    {loading ? <div className="loader"></div> :
+                        ratings.map(rating => {
+                            return (
+                                <div key={rating.id}>
+                                    <StarRatingComponent value={rating.rate} />
+                                    {rating.message}&nbsp;
+                                    {new Date(rating.createdAt.seconds * 1000).toLocaleDateString("fr")}
+                                </div>
+                            )
+                        })
+                    }
+                    <div>
+                        Avis
+                    Note : <StarRatingComponent value={rate} onStarHover={(next) => setRate(next)} />
+                        <input type="textarea" id="rateText" />
+                        <input type="button" value="Noter" onClick={() => { sendRate() }} />
+                    </div>
+                </div>)
+        }
+    } else {
+        return (
+            <div style={loading ? { backgroundColor: "gray", height: "1000px" } : null}>
+                <h1>{movie.title}</h1>
+                <Image src={movie.imageURL} />
+                {loading ? <div className="loader"></div> :
+                    ratings.map(rating => {
+                        return (
+                            <div key={rating.id}>
+                                <StarRatingComponent value={rating.rate} />
+                                {rating.message}&nbsp;
+                                {new Date(rating.createdAt.seconds * 1000).toLocaleDateString("fr")}
+                            </div>
+                        )
+                    })
+                }
+                <div>
+                    Vous devez vous connecter pour pouvoir noter ce film
+                </div>
             </div>
-        </div>
-    )
-
-
+        );
+    }
 }
 
 export default MovieDetail
