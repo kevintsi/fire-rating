@@ -1,7 +1,6 @@
 import React, { createContext, useEffect, useState } from "react"
-import { Container } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
-import NavBar from "./components/Nav";
+import NavBar from "./components/Nav/Nav";
 import Routes from "./components/Routes";
 import { auth } from "./firebase"
 
@@ -66,10 +65,8 @@ function App() {
       setVerifyPasswordError,
       user
     }}>
-      <Container fluid={true}>
-        <NavBar />
-        <Routes />
-      </Container>
+      <NavBar />
+      <Routes />
     </AuthContext.Provider>
   );
 }

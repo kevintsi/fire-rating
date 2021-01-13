@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
-import Movie from "./Movie"
-import app from "../firebase"
-import { Row, Col } from "react-bootstrap"
+import Movie from "../Movie/Movie"
+import app from "../../firebase"
+import "./MovieList.css"
 
 const MoviesList = () => {
 
@@ -26,21 +26,15 @@ const MoviesList = () => {
     }, [])
 
     return (
-        <div style={loading ? { backgroundColor: "gray", height: "1000px" } : null}>
-            <h1>Films</h1>
+        <div className="container" style={loading ? { height: "1000px" } : null}>
+            <div className="container-films"><h1>Films</h1></div>
             {
                 loading ? <div className="loader"></div> :
                     (
-                        <Row xs={2} md={5} style={{ overflow: "auto", height: "80vh" }}>
-                            {movies.map(movie => {
-                                return (
-                                    <Col style={{ textAlign: "center" }} key={movie.id}>
-                                        <Movie movie={movie} />
-                                    </Col>
-                                )
-                            })
+                        <div className="container-movies-list">
+                            {movies.map(movie => <Movie movie={movie} />)
                             }
-                        </Row>
+                        </div>
                     )
             }
         </div>

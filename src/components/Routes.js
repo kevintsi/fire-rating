@@ -1,10 +1,10 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
-import Movies from "./MoviesList"
-import Animes from "./Animes"
-import Mangas from "./Mangas"
-import SignIn from "./SignIn"
-import SignUp from "./SignUp"
-import MovieDetail from "./MovieDetail"
+import Movies from "./MovieList/MoviesList"
+import Animes from "./Anime/Animes"
+import Mangas from "./Manga/Mangas"
+import SignIn from "./SignIn/SignIn"
+import SignUp from "./SignUp/SignUp"
+import MovieDetail from "./MovieDetail/MovieDetail"
 
 function Routes() {
     return (
